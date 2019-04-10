@@ -5,10 +5,11 @@ class App extends Component {
   state = {
     value: "hi",
     number: 4,
-    list: [
-      "name1",
-      "name2"
-    ]
+    startDate: "",
+    startTime: "",
+    endDate: "",
+    endTime: "",
+    totalDuration: "0"
   };
 
   textChange = (event) => {
@@ -17,6 +18,32 @@ class App extends Component {
 
   handleClick = (event) => {
     this.setState({number:event.target.number});
+  }
+
+  startDateChange = (event) => {
+    this.calculateTotalDuration({startDate:event.target.startDate}, {startDate:event.target.startDate});
+  }
+
+  endDateChange = (event) => {
+    this.calculateTotalDuration({startDate:event.target.startDate}, {startDate:event.target.startDate});
+  }
+
+  calculateTotalDuration(_startDate, _endDate) {
+    var startDateObj = new Date(_startDate);
+    var endDateObj = new Date(_endDate);
+    var one_day=1000*60*60*24;
+
+    // Convert both dates to milliseconds
+    var date1_ms = startDateObj.getTime();
+    var date2_ms = endDateObj.getTime();
+
+    // Calculate the difference in milliseconds
+    var difference_ms = date2_ms - date1_ms;
+    
+    // Convert back to days and return
+    this.setState({totalDuration: Math.round(difference_ms/one_day)});
+
+    // https://www.htmlgoodies.com/html5/javascript/calculating-the-difference-between-two-dates-in-javascript.html
   }
 
   render() {
@@ -31,16 +58,31 @@ class App extends Component {
             {this.state.value}
           </div>
 
+          <br/><br/>
+
           <div>
-            {this.state.list[0]}
+            <label htmlFor="start">Start date: </label>
+            <input type="date" onChange={this.startDateChange} id="start" name="trip-start"
+                  value="2018-07-22"
+                  min="2018-01-01" max="2018-12-31"/>
+
+            <label htmlFor="start">Start time: </label>
+            <input type="time" id="appt" name="appt"
+                  min="9:00" max="18:00"/>
+
             <br/>
-            {this.state.list.join(" ")}
-            <br/>
-            {
-                this.state.list.map( x => 
-                  <span>{x}</span>
-                )
-            }
+
+            <label htmlFor="start">End date: </label>
+            <input type="date" onChange={this.endDateChange} id="start" name="trip-start"
+                  value="2018-07-24"
+                  min="2018-01-01" max="2018-12-31"/>
+
+            <label htmlFor="start">Start time: </label>
+            <input type="time" id="appt" name="appt"
+                  min="9:00" max="18:00"/>
+          </div>
+          <div>
+            Duration: {this.state.totalDuration}
           </div>
       </div>
     );
