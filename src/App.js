@@ -21,27 +21,37 @@ class App extends Component {
   }
 
   startDateChange = (event) => {
-    this.calculateTotalDuration({startDate:event.target.startDate}, {startDate:event.target.startDate});
+    
   }
 
   endDateChange = (event) => {
-    this.calculateTotalDuration({startDate:event.target.startDate}, {startDate:event.target.startDate});
+    
   }
 
-  calculateTotalDuration(_startDate, _endDate) {
-    var startDateObj = new Date(_startDate);
-    var endDateObj = new Date(_endDate);
-    var one_day=1000*60*60*24;
+  calculateTotalDuration = (event) => {
+    var startDateObj = new Date({startDate:event.target.startDate});
+    var endDateObj = new Date({endDate:event.target.endDate});
+    // var one_day=1000*60*60*24;
+
+    let duration = Math.floor((
+      Date.UTC(endDateObj.getFullYear(), endDateObj.getMonth(), endDateObj.getDate()) 
+      - Date.UTC(startDateObj.getFullYear(), startDateObj.getMonth(), startDateObj.getDate()) ) 
+      / (1000 * 60 * 60 * 24));
+
 
     // Convert both dates to milliseconds
-    var date1_ms = startDateObj.getTime();
-    var date2_ms = endDateObj.getTime();
+    // var date1_ms = startDateObj.getTime();
+    // var date2_ms = endDateObj.getTime();
+
+    
 
     // Calculate the difference in milliseconds
-    var difference_ms = date2_ms - date1_ms;
+    // var difference_ms = date2_ms - date1_ms;
     
     // Convert back to days and return
-    this.setState({totalDuration: Math.round(difference_ms/one_day)});
+    this.setState({totalDuration: duration});
+    // this.setState({totalDuration:event.target.totalDuration});
+
 
     // https://www.htmlgoodies.com/html5/javascript/calculating-the-difference-between-two-dates-in-javascript.html
   }
@@ -62,9 +72,7 @@ class App extends Component {
 
           <div>
             <label htmlFor="start">Start date: </label>
-            <input type="date" onChange={this.startDateChange} id="start" name="trip-start"
-                  value="2018-07-22"
-                  min="2018-01-01" max="2018-12-31"/>
+            <input type="date" name="bday" onChange={this.startDateChange}/>
 
             <label htmlFor="start">Start time: </label>
             <input type="time" id="appt" name="appt"
@@ -73,14 +81,16 @@ class App extends Component {
             <br/>
 
             <label htmlFor="start">End date: </label>
-            <input type="date" onChange={this.endDateChange} id="start" name="trip-start"
-                  value="2018-07-24"
-                  min="2018-01-01" max="2018-12-31"/>
+            <input type="date" name="bday" onChange={(event) => this.setState({startDate: event.target.startDate})}/>
 
             <label htmlFor="start">Start time: </label>
             <input type="time" id="appt" name="appt"
                   min="9:00" max="18:00"/>
           </div>
+          <div>
+            <button type="button" onClick={this.calculateTotalDuration}>Calculate</button>
+          </div>
+
           <div>
             Duration: {this.state.totalDuration}
           </div>
