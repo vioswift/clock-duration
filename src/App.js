@@ -21,7 +21,8 @@ class App extends Component {
   }
 
   startDateChange = (event) => {
-    
+    this.setState({startDate:event.target.startDate});
+    console.log(this.state.startDate);
   }
 
   endDateChange = (event) => {
@@ -81,7 +82,7 @@ class App extends Component {
             <br/>
 
             <label htmlFor="start">End date: </label>
-            <input type="date" name="bday" onChange={(event) => this.setState({startDate: event.target.startDate})}/>
+            <input type="date" name="bday" onChange={this.startDateChange}/>
 
             <label htmlFor="start">Start time: </label>
             <input type="time" id="appt" name="appt"
@@ -92,6 +93,7 @@ class App extends Component {
           </div>
 
           <div>
+            Start Date: {this.state.startDate}<br/>
             Duration: {this.state.totalDuration}
           </div>
       </div>
