@@ -14,6 +14,7 @@ class App extends Component {
 
   textChange = (event) => {
     this.setState({value:event.target.value});
+    console.log(this.state.value);
   }
 
   handleClick = (event) => {
@@ -45,7 +46,6 @@ class App extends Component {
     // var date2_ms = endDateObj.getTime();
 
     
-
     // Calculate the difference in milliseconds
     // var difference_ms = date2_ms - date1_ms;
     
@@ -73,7 +73,7 @@ class App extends Component {
 
           <div>
             <label htmlFor="start">Start date: </label>
-            <input type="date" name="bday" onChange={this.startDateChange}/>
+            <input type="date" name="startDate" onChange={(e)=> {this.startDateChange(e)}} />
 
             <label htmlFor="start">Start time: </label>
             <input type="time" id="appt" name="appt"
