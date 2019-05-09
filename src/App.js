@@ -78,28 +78,28 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-          <h1>ClockDuration</h1>
+          <h1 className="h1">ClockDuration</h1>
           <div>
-            <h2>Start</h2>
-            <label htmlFor="start">Date: </label>
-            <input type="date" name="startDate" onChange={this.startDateChange} />
+            <h2 className="h2">Start</h2>
+            <label htmlFor="start" className="label label-default">Date: </label>
+            <input type="date" name="startDate" className="form-control" onChange={this.startDateChange}/>
 
-            <label htmlFor="start">Time: </label>
-            <input type="time" id="appt" name="appt" onChange={this.startTimeChange}
-                  min="9:00" max="18:00"/>
+            <label htmlFor="start" className="label label-default">Time: </label>
+            <input type="time" id="appt" name="appt" className="form-control" onChange={this.startTimeChange}
+              min="9:00" max="18:00"/>
 
             <br/>
 
-            <h2>End</h2>
-            <label htmlFor="start">Date: </label>
-            <input type="date" name="bday" onChange={this.endDateChange}/>
+            <h2 className="h2">End</h2>
+            <label htmlFor="start" className="label label-default">Date: </label>
+            <input type="date" name="bday" className="form-control" onChange={this.endDateChange}/>
 
-            <label htmlFor="start">Time: </label>
-            <input type="time" id="appt" name="appt" onChange={this.endTimeChange}
+            <label htmlFor="start" className="label label-default">Time: </label>
+            <input type="time" id="appt" name="appt" className="form-control" onChange={this.endTimeChange}
                   min="9:00" max="18:00"/>
           </div>
           <div>
-            <button type="button" onClick={this.calculateTotalDuration}>Calculate</button>
+            <button type="button" className="btn btn-dark" onClick={this.calculateTotalDuration}>Calculate</button>
           </div>
 
           <div>
