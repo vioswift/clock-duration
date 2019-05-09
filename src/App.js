@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
 
+function getTwoDigitDateFormat(monthOrDate) {
+  return (monthOrDate < 10) ? '0' + monthOrDate : '' + monthOrDate;
+}
+
 class App extends Component {
   state = {
-    value: "hi",
-    number: 4,
     startDate: "",
     startTime: "",
     endDate: "",
@@ -12,80 +14,88 @@ class App extends Component {
     totalDuration: "0"
   };
 
-  textChange = (event) => {
-    this.setState({value:event.target.value});
-    console.log(this.state.value);
-  }
-
-  handleClick = (event) => {
-    this.setState({number:event.target.number});
-  }
-
   startDateChange = (event) => {
-    this.setState({startDate:event.target.startDate});
-    console.log(this.state.startDate);
+    this.setState({startDate:event.target.value});
   }
 
   endDateChange = (event) => {
-    
+    this.setState({endDate:event.target.value});
+  }
+
+  startTimeChange = (event) => {
+    this.setState({startTime:event.target.value});
+  }
+
+  endTimeChange = (event) => {
+    this.setState({endTime:event.target.value});
   }
 
   calculateTotalDuration = (event) => {
-    var startDateObj = new Date({startDate:event.target.startDate});
-    var endDateObj = new Date({endDate:event.target.endDate});
-    // var one_day=1000*60*60*24;
+    var startDateObj = new Date(this.state.startDate);
+    var endDateObj = new Date(this.state.endDate);
 
-    let duration = Math.floor((
-      Date.UTC(endDateObj.getFullYear(), endDateObj.getMonth(), endDateObj.getDate()) 
-      - Date.UTC(startDateObj.getFullYear(), startDateObj.getMonth(), startDateObj.getDate()) ) 
-      / (1000 * 60 * 60 * 24));
+    var date1Str = 
+    startDateObj.getFullYear() +
+    "-" +
+    getTwoDigitDateFormat(startDateObj.getMonth() + 1) +
+    "-" +
+    getTwoDigitDateFormat(startDateObj.getDate()) +
+    "T" +
+    this.state.startTime +
+    ":00";
 
+    var date2Str = 
+    endDateObj.getFullYear() +
+    "-" +
+    getTwoDigitDateFormat(endDateObj.getMonth() + 1) +
+    "-" +
+    getTwoDigitDateFormat(endDateObj.getDate()) +
+    "T" +
+    this.state.endTime +
+    ":00";
 
-    // Convert both dates to milliseconds
-    // var date1_ms = startDateObj.getTime();
-    // var date2_ms = endDateObj.getTime();
+    var date1 = new Date(date1Str);
+    var date2 = new Date(date2Str);
 
+    var res = Math.abs(date1 - date2) / 1000;
+    console.log("res= " + res);
+
+    // get total days between two dates
+    var days = Math.floor(res / 86400);                      
     
-    // Calculate the difference in milliseconds
-    // var difference_ms = date2_ms - date1_ms;
+    // get hours        
+    var hours = Math.floor(res / 3600) % 24;        
     
+    // get minutes
+    var minutes = Math.floor(res / 60) % 60;
+
     // Convert back to days and return
-    this.setState({totalDuration: duration});
-    // this.setState({totalDuration:event.target.totalDuration});
-
-
-    // https://www.htmlgoodies.com/html5/javascript/calculating-the-difference-between-two-dates-in-javascript.html
+    this.setState({
+      totalDuration: days + " Days, " + hours + " Hours, " + minutes + " Minutes"
+    });
   }
 
   render() {
     return (
       <div className="App">
-          <label htmlFor="">input</label>
-          <input type="text" onChange={this.textChange} className="form-control" value={this.state.value} />
-
-          <button type="button" onClick={()=> this.setState({number:this.state.number + 1})}>Click Me! {this.state.number}</button>
-
+          <h1>ClockDuration</h1>
           <div>
-            {this.state.value}
-          </div>
+            <h2>Start</h2>
+            <label htmlFor="start">Date: </label>
+            <input type="date" name="startDate" onChange={this.startDateChange} />
 
-          <br/><br/>
-
-          <div>
-            <label htmlFor="start">Start date: </label>
-            <input type="date" name="startDate" onChange={(e)=> {this.startDateChange(e)}} />
-
-            <label htmlFor="start">Start time: </label>
-            <input type="time" id="appt" name="appt"
+            <label htmlFor="start">Time: </label>
+            <input type="time" id="appt" name="appt" onChange={this.startTimeChange}
                   min="9:00" max="18:00"/>
 
             <br/>
 
-            <label htmlFor="start">End date: </label>
-            <input type="date" name="bday" onChange={this.startDateChange}/>
+            <h2>End</h2>
+            <label htmlFor="start">Date: </label>
+            <input type="date" name="bday" onChange={this.endDateChange}/>
 
-            <label htmlFor="start">Start time: </label>
-            <input type="time" id="appt" name="appt"
+            <label htmlFor="start">Time: </label>
+            <input type="time" id="appt" name="appt" onChange={this.endTimeChange}
                   min="9:00" max="18:00"/>
           </div>
           <div>
@@ -93,8 +103,7 @@ class App extends Component {
           </div>
 
           <div>
-            Start Date: {this.state.startDate}<br/>
-            Duration: {this.state.totalDuration}
+            <p><strong>Duration:</strong>  {this.state.totalDuration}</p>  
           </div>
       </div>
     );
