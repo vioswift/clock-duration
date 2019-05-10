@@ -79,31 +79,60 @@ class App extends Component {
     return (
       <div className="App">
           <h1 className="h1">ClockDuration</h1>
-          <div>
-            <h2 className="h2">Start</h2>
-            <label htmlFor="start" className="label label-default">Date: </label>
-            <input type="date" name="startDate" className="form-control" onChange={this.startDateChange}/>
+          <hr/>
 
-            <label htmlFor="start" className="label label-default">Time: </label>
-            <input type="time" id="appt" name="appt" className="form-control" onChange={this.startTimeChange}
-              min="9:00" max="18:00"/>
+          <div className="container">
+            <div className="row">
+              <div className="col-md-6 offset-md-3">
+                  <div className="col-md-7">
+                    <h2 className="h2 float-left">Start</h2>
+                  </div>
+                  <div className="form-group row">
+                    <div className="col-md-6">
+                      <label htmlFor="startDate" className="label label-default float-left">Date: </label>
+                      <input type="date" name="startDate" className="form-control" onChange={this.startDateChange}/>
+                    </div>
 
-            <br/>
+                    <div className="col-md-6">
+                      <label htmlFor="startTime" className="label label-default float-left">Time: </label>
+                      <input type="time" name="startTime" className="form-control" onChange={this.startTimeChange}/>
+                    </div>
+                  </div>
 
-            <h2 className="h2">End</h2>
-            <label htmlFor="start" className="label label-default">Date: </label>
-            <input type="date" name="bday" className="form-control" onChange={this.endDateChange}/>
+                  <hr/>
 
-            <label htmlFor="start" className="label label-default">Time: </label>
-            <input type="time" id="appt" name="appt" className="form-control" onChange={this.endTimeChange}
-                  min="9:00" max="18:00"/>
-          </div>
-          <div>
-            <button type="button" className="btn btn-dark" onClick={this.calculateTotalDuration}>Calculate</button>
-          </div>
+                  <div className="col-md-7">
+                    <h2 className="h2 float-left">End</h2>
+                  </div>
+                  <div className="form-group row">
+                      <div className="col-md-6">
+                        <label htmlFor="endDate" className="label label-default float-left">Date: </label>
+                        <input type="date" name="endDate" className="form-control" onChange={this.endDateChange}/>                      
+                      </div>
 
-          <div>
-            <p><strong>Duration:</strong>  {this.state.totalDuration}</p>  
+                      <div className="col-md-6">
+                        <label htmlFor="endTime" className="label label-default float-left">Time: </label>
+                        <input type="time" name="endTime" className="form-control" onChange={this.endTimeChange}/>                                         
+                      </div>
+                  </div>
+
+                  <div className="form-group row">
+                    <div class="col-md-6 offset-md-3">
+                      <button type="button" className="btn btn-dark" onClick={this.calculateTotalDuration}>Calculate</button>
+                    </div>
+                  </div>
+
+                  <div className="form-group row">
+                    <div class="col-md-12">
+                      <div class="alert alert-info" role="alert">
+                          {this.state.totalDuration}
+                      </div>
+                        
+                    </div>
+
+                  </div>
+              </div>
+            </div>
           </div>
       </div>
     );
