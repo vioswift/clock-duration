@@ -1,9 +1,9 @@
-import React, { Component }  from 'react';
+import React from 'react';
 import './App.css';
 import NavBar from './navBar';
 import moment from 'moment';
 
-class App extends Component {
+class App extends React.Component {
   getTwoDigitDateFormat(monthOrDate) {
     return (monthOrDate < 10) ? '0' + monthOrDate : '' + monthOrDate;
   }
