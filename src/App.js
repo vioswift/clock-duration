@@ -1,37 +1,38 @@
-import React, { Component } from 'react';
+import React, { Component }  from 'react';
 import './App.css';
 import NavBar from './navBar';
-
-function getTwoDigitDateFormat(monthOrDate) {
-  return (monthOrDate < 10) ? '0' + monthOrDate : '' + monthOrDate;
-}
-
-function getCurrentDate() {
-  var currentYear = new Date().getFullYear();
-  var currentMonth = getTwoDigitDateFormat(new Date().getMonth() + 1);
-  var getDate = getTwoDigitDateFormat(new Date().getDate());
-  var currentDateString = currentYear + "-" + currentMonth + "-" + getDate;
-
-  return currentDateString;
-}
-
-function getCurrentTime(){
-  var hours = new Date().getHours();
-  var minutes = new Date().getMinutes();
-  hours = hours < 12 ? '0' + hours : hours;
-  var currentTimeString = hours + ':' + minutes;
-
-  return currentTimeString;
-}
+import moment from 'moment';
 
 class App extends Component {
+  getTwoDigitDateFormat(monthOrDate) {
+    return (monthOrDate < 10) ? '0' + monthOrDate : '' + monthOrDate;
+  }
+  
+  getCurrentDate() {
+    var currentYear = new Date().getFullYear();
+    var currentMonth = this.getTwoDigitDateFormat(new Date().getMonth() + 1);
+    var getDate = this.getTwoDigitDateFormat(new Date().getDate());
+    var currentDateString = currentYear + "-" + currentMonth + "-" + getDate;
+  
+    return currentDateString;
+  }
+  
+  getCurrentTime(){
+    var hours = new Date().getHours();
+    var minutes = new Date().getMinutes();
+    hours = hours < 12 ? '0' + hours : hours;
+    var currentTimeString = hours + ':' + minutes;
+  
+    return currentTimeString;
+  }
+
   state = {
     currentDate: "",
-    startDate: getCurrentDate(),
-    startTime: getCurrentTime(),
-    endDate: getCurrentDate(),
-    endTime: getCurrentTime(),
-    totalDuration: "0 Days, 0 Hours, 0 Minutes"
+    startDate: this.getCurrentDate(),
+    startTime: this.getCurrentTime(),
+    endDate: this.getCurrentDate(),
+    endTime: this.getCurrentTime(),
+    totalDuration: "-"
   };
 
   startDateChange = (event) => {
@@ -51,45 +52,33 @@ class App extends Component {
   }
 
   calculateTotalDuration = (event) => {
-    var startDateObj = new Date(this.state.startDate);
-    var endDateObj = new Date(this.state.endDate);
+    var startDateObj = new Date(this.state.startDate + " " + this.state.startTime);
+    var endDateObj = new Date(this.state.endDate + " " + this.state.endTime);
+    var startDate = moment(startDateObj, 'DD/MM/YYYY HH:mm:ss');
+    var endDate = moment(endDateObj, 'DD/MM/YYYY HH:mm:ss');
 
-    var date1Str = 
-    startDateObj.getFullYear() +
-    "-" +
-    getTwoDigitDateFormat(startDateObj.getMonth() + 1) +
-    "-" +
-    getTwoDigitDateFormat(startDateObj.getDate()) +
-    "T" +
-    this.state.startTime +
-    ":00";
+    var now = startDate, then = endDate, ms = then.diff(now, 'milliseconds', true);
 
-    var date2Str = 
-    endDateObj.getFullYear() +
-    "-" +
-    getTwoDigitDateFormat(endDateObj.getMonth() + 1) +
-    "-" +
-    getTwoDigitDateFormat(endDateObj.getDate()) +
-    "T" +
-    this.state.endTime +
-    ":00";
+    var years = Math.floor(moment.duration(ms).asYears());
+    then = then.subtract(years, 'years');
 
-    var date1 = new Date(date1Str);
-    var date2 = new Date(date2Str);
+    ms = then.diff(now, 'milliseconds', true);
+    var months = Math.floor(moment.duration(ms).asMonths());
 
-    var res = Math.abs(date1 - date2) / 1000;
+    then = then.subtract(months, 'months').subtract(0, 'days'); // not sure why I had to subtract 0 days
+    ms = then.diff(now, 'milliseconds', true);
+    var days = Math.floor(moment.duration(ms).asDays());
 
-    // get total days between two dates
-    var days = Math.floor(res / 86400);                      
-    
-    // get hours        
-    var hours = Math.floor(res / 3600) % 24;        
-    
-    // get minutes
-    var minutes = Math.floor(res / 60) % 60;
+    then = then.subtract(days, 'days');
+    ms = then.diff(now, 'milliseconds', true);
+    var hours = Math.floor(moment.duration(ms).asHours());
+
+    then = then.subtract(hours, 'hours');
+    ms = then.diff(now, 'milliseconds', true);
+    var minutes = Math.floor(moment.duration(ms).asMinutes());
 
     this.setState({
-      totalDuration: days + " Days, " + hours + " Hours, " + minutes + " Minutes"
+      totalDuration: years + " Years, " + months + " Months, " + days + " Days, " + hours + " Hours, " + minutes + " Minutes"
     });
   }
 
@@ -145,8 +134,11 @@ class App extends Component {
                   </div>
                 </div>
 
+                <small><strong>*</strong>Includes <strong>start</strong> and <strong>end</strong> date</small>
+
                 {/* total duration */}
                 <div className="form-group row">
+                  
                   <div className="col-md-12">
                     <div className="alert alert-info" role="alert">
                         {this.state.totalDuration} 
