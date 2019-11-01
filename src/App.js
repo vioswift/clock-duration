@@ -4,35 +4,12 @@ import NavBar from './navBar';
 import moment from 'moment';
 
 class App extends React.Component {
-  getTwoDigitDateFormat(monthOrDate) {
-    return (monthOrDate < 10) ? '0' + monthOrDate : '' + monthOrDate;
-  }
-  
-  getCurrentDate() {
-    var currentYear = new Date().getFullYear();
-    var currentMonth = this.getTwoDigitDateFormat(new Date().getMonth() + 1);
-    var getDate = this.getTwoDigitDateFormat(new Date().getDate());
-    var currentDateString = currentYear + "-" + currentMonth + "-" + getDate;
-  
-    return currentDateString;
-  }
-  
-  getCurrentTime(){
-    var hours = new Date().getHours();
-    var minutes = new Date().getMinutes();
-    hours = hours < 12 ? '0' + hours : hours;
-    var currentTimeString = hours + ':' + minutes;
-  
-    return currentTimeString;
-  }
-
   state = {
-    currentDate: "",
-    startDate: this.getCurrentDate(),
-    startTime: this.getCurrentTime(),
-    endDate: this.getCurrentDate(),
-    endTime: this.getCurrentTime(),
-    totalDuration: "-"
+    startDate: moment().format('YYYY-MM-DD'),
+    startTime: moment().format('HH:mm'),
+    endDate: moment().format('YYYY-MM-DD'),
+    endTime: moment().format('HH:mm'),
+    totalDuration: "The duration will appear here."
   };
 
   startDateChange = (event) => {
@@ -51,42 +28,62 @@ class App extends React.Component {
     this.setState({endTime:event.target.value});
   }
 
-  calculateTotalDuration = (event) => {
+  calculateTotalDuration()  {
     var startDateObj = new Date(this.state.startDate + " " + this.state.startTime);
     var endDateObj = new Date(this.state.endDate + " " + this.state.endTime);
     var startDate = moment(startDateObj, 'DD/MM/YYYY HH:mm:ss');
     var endDate = moment(endDateObj, 'DD/MM/YYYY HH:mm:ss');
 
+    // time now
     var now = startDate, then = endDate, ms = then.diff(now, 'milliseconds', true);
 
+    // years
     var years = Math.floor(moment.duration(ms).asYears());
     then = then.subtract(years, 'years');
 
+    // months
     ms = then.diff(now, 'milliseconds', true);
     var months = Math.floor(moment.duration(ms).asMonths());
 
-    then = then.subtract(months, 'months').subtract(0, 'days'); // not sure why I had to subtract 0 days
+    // weeks
+    then = then.subtract(months, 'months').subtract(0, 'months');// not sure why I had to subtract 0 days
+    ms = then.diff(now, 'milliseconds', true);
+    var weeks = Math.floor(moment.duration(ms).asWeeks());
+
+    // days
     ms = then.diff(now, 'milliseconds', true);
     var days = Math.floor(moment.duration(ms).asDays());
 
+    // hours
     then = then.subtract(days, 'days');
     ms = then.diff(now, 'milliseconds', true);
     var hours = Math.floor(moment.duration(ms).asHours());
 
+    // minutes
     then = then.subtract(hours, 'hours');
     ms = then.diff(now, 'milliseconds', true);
     var minutes = Math.floor(moment.duration(ms).asMinutes());
 
-    this.setState({
-      totalDuration: years + " Years, " + months + " Months, " + days + " Days, " + hours + " Hours, " + minutes + " Minutes"
-    });
+    if (startDateObj > endDateObj) {
+      this.setState({totalDuration: "Error: Start Date is greater then the End Date!"});
+    } else {
+      this.setState({
+        totalDuration: 
+        years + " Years, " + 
+        months + " Months, " + 
+        weeks + " Weeks, " +
+        days + " Days, " + 
+        hours + " Hours, " + 
+        minutes + " Minutes"
+      });
+    }
   }
 
   render() {
     return (
       <div className="App">
           <NavBar/>
-          <h1>ClockDuration</h1>
+          <h1 className="p-4">ClockDuration</h1>
 
           <div className="container">
             <div className="row">
@@ -130,7 +127,7 @@ class App extends React.Component {
                 {/* calculate button */}
                 <div className="form-group row">
                   <div className="col-md-6 offset-md-3">
-                    <button type="button" className="btn btn-dark btn-lg btn-block" onClick={this.calculateTotalDuration}>Calculate</button>
+                    <button type="button" className="btn btn-dark btn-lg btn-block" onClick={this.calculateTotalDuration.bind(this)}>Calculate</button>
                   </div>
                 </div>
 
