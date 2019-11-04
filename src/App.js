@@ -4,11 +4,14 @@ import NavBar from './navBar';
 import moment from 'moment';
 
 class App extends React.Component {
+  dateFormat = 'YYYY-MM-DD';
+  timeFormat = 'HH:mm';
+
   state = {
-    startDate: moment().format('YYYY-MM-DD'),
-    startTime: moment().format('HH:mm'),
-    endDate: moment().format('YYYY-MM-DD'),
-    endTime: moment().format('HH:mm'),
+    startDate: moment().format(this.dateFormat),
+    startTime: moment().format(this.timeFormat),
+    endDate: moment().format(this.dateFormat),
+    endTime: moment().format(this.timeFormat),
     totalDuration: "The duration will appear here."
   };
 
@@ -31,8 +34,8 @@ class App extends React.Component {
   calculateTotalDuration()  {
     var startDateObj = new Date(this.state.startDate + " " + this.state.startTime);
     var endDateObj = new Date(this.state.endDate + " " + this.state.endTime);
-    var startDate = moment(startDateObj, 'YYYY/MM/DD HH:mm:ss');
-    var endDate = moment(endDateObj, 'YYYY/MM/DD HH:mm:ss');
+    var startDate = moment(startDateObj, 'MM-DD-YYYY' + this.timeFormat);
+    var endDate = moment(endDateObj, 'MM-DD-YYYY' + ' ' + this.timeFormat);
     
     // time now
     var now = startDate, then = endDate, ms = then.diff(now, 'milliseconds', true);
