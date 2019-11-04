@@ -13,11 +13,11 @@ class App extends React.Component {
   };
 
   startDateChange = (event) => {
-    this.setState({startDate: moment(event.target.value).format('YYYY-MM-DD')});
+    this.setState({startDate: moment(event.target.value, 'YYYY-MM-DD')});
   }
 
   endDateChange = (event) => {
-    this.setState({endDate: moment(event.target.value).format('YYYY-MM-DD')});
+    this.setState({endDate: moment(event.target.value, 'YYYY-MM-DD')});
   }
 
   startTimeChange = (event) => {
