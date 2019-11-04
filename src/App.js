@@ -13,11 +13,11 @@ class App extends React.Component {
   };
 
   startDateChange = (event) => {
-    this.setState({startDate: moment(event.target.value, 'YYYY-MM-DD')});
+    this.setState({startDate: event.target.value});
   }
 
   endDateChange = (event) => {
-    this.setState({endDate: moment(event.target.value, 'YYYY-MM-DD')});
+    this.setState({endDate: event.target.value});
   }
 
   startTimeChange = (event) => {
@@ -31,8 +31,8 @@ class App extends React.Component {
   calculateTotalDuration()  {
     var startDateObj = new Date(this.state.startDate + " " + this.state.startTime);
     var endDateObj = new Date(this.state.endDate + " " + this.state.endTime);
-    var startDate = moment(startDateObj, 'YYYY-MM-DD HH:mm:ss');
-    var endDate = moment(endDateObj, 'YYYY-MM-DD HH:mm:ss');
+    var startDate = moment(startDateObj, 'YYYY-MM-DD HH:mm:ss').toDate();
+    var endDate = moment(endDateObj, 'YYYY-MM-DD HH:mm:ss').toDate();
 
     // time now
     var now = startDate, then = endDate, ms = then.diff(now, 'milliseconds', true);
