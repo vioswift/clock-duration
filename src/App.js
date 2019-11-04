@@ -31,8 +31,8 @@ class App extends React.Component {
   calculateTotalDuration()  {
     var startDateObj = new Date(this.state.startDate + " " + this.state.startTime);
     var endDateObj = new Date(this.state.endDate + " " + this.state.endTime);
-    var startDate = moment(startDateObj, 'YYYY-MM-DD HH:mm:ss').toDate();
-    var endDate = moment(endDateObj, 'YYYY-MM-DD HH:mm:ss').toDate();
+    var startDate = moment(startDateObj, 'YYYY-MM-DD HH:mm:ss');
+    var endDate = moment(endDateObj, 'YYYY-MM-DD HH:mm:ss');
 
     // time now
     var now = startDate, then = endDate, ms = then.diff(now, 'milliseconds', true);
