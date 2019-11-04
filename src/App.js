@@ -13,26 +13,26 @@ class App extends React.Component {
   };
 
   startDateChange = (event) => {
-    this.setState({startDate:event.target.value});
+    this.setState({startDate: moment(event.target.value).format('YYYY-MM-DD')});
   }
 
   endDateChange = (event) => {
-    this.setState({endDate:event.target.value});
+    this.setState({endDate: moment(event.target.value).format('YYYY-MM-DD')});
   }
 
   startTimeChange = (event) => {
-    this.setState({startTime:event.target.value});
+    this.setState({startTime: event.target.value});
   }
 
   endTimeChange = (event) => {
-    this.setState({endTime:event.target.value});
+    this.setState({endTime: event.target.value});
   }
 
   calculateTotalDuration()  {
     var startDateObj = new Date(this.state.startDate + " " + this.state.startTime);
     var endDateObj = new Date(this.state.endDate + " " + this.state.endTime);
-    var startDate = moment(startDateObj, 'DD/MM/YYYY HH:mm:ss');
-    var endDate = moment(endDateObj, 'DD/MM/YYYY HH:mm:ss');
+    var startDate = moment(startDateObj, 'YYYY-MM-DD HH:mm:ss');
+    var endDate = moment(endDateObj, 'YYYY-MM-DD HH:mm:ss');
 
     // time now
     var now = startDate, then = endDate, ms = then.diff(now, 'milliseconds', true);
@@ -46,7 +46,7 @@ class App extends React.Component {
     var months = Math.floor(moment.duration(ms).asMonths());
 
     // weeks
-    then = then.subtract(months, 'months').subtract(0, 'months');// not sure why I had to subtract 0 days
+    then = then.subtract(months, 'months').subtract(0, 'months'); // not sure why I had to subtract 0 months
     ms = then.diff(now, 'milliseconds', true);
     var weeks = Math.floor(moment.duration(ms).asWeeks());
 
@@ -83,7 +83,7 @@ class App extends React.Component {
     return (
       <div className="App">
           <NavBar/>
-          <h1 className="p-4">ClockDuration</h1>
+          <h1 className="h1 p-4">ClockDuration</h1>
 
           <div className="container">
             <div className="row">
