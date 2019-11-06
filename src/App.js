@@ -32,42 +32,48 @@ class App extends React.Component {
   }
 
   calculateTotalDuration()  {
-    var startDateObj = new Date(this.state.startDate + " " + this.state.startTime);
-    var endDateObj = new Date(this.state.endDate + " " + this.state.endTime);
-    var startDate = moment(startDateObj, 'MM-DD-YYYY' + this.timeFormat);
-    var endDate = moment(endDateObj, 'MM-DD-YYYY' + ' ' + this.timeFormat);
-    
-    // time now
-    var now = startDate, then = endDate, ms = then.diff(now, 'milliseconds', true);
+    var startDate = moment(this.state.startDate + " " + this.state.startTime, this.dateFormat + this.timeFormat);
+    var endDate = moment(this.state.endDate + " " + this.state.endTime, this.dateFormat + this.timeFormat);
+    var years = 0;
+    var months = 0;
+    var weeks = 0;
+    var days = 0;
+    var hours = 0;
+    var minutes = 0;
+    var now = startDate
+    var then = endDate;
+    var ms = then.diff(now, 'milliseconds', true); // time now
+    var isNegative = now.isAfter(then); // is the start date, start before the end date
 
     // years
-    var years = Math.floor(moment.duration(ms).asYears());
-    then = then.subtract(years, 'years');
+    years = Math.floor(moment.duration(ms).asYears());
+    then = then.subtract(years, 'years', true);
 
     // months
     ms = then.diff(now, 'milliseconds', true);
-    var months = Math.floor(moment.duration(ms).asMonths());
+    months = Math.floor(moment.duration(ms).asMonths());
 
     // weeks
     then = then.subtract(months, 'months').subtract(0, 'months'); // not sure why I had to subtract 0 months
     ms = then.diff(now, 'milliseconds', true);
-    var weeks = Math.floor(moment.duration(ms).asWeeks());
+    weeks = Math.floor(moment.duration(ms).asWeeks());
 
     // days
+    then = then.subtract(weeks, 'weeks');
     ms = then.diff(now, 'milliseconds', true);
-    var days = Math.floor(moment.duration(ms).asDays());
+    days = Math.floor(moment.duration(ms).asDays());
 
     // hours
     then = then.subtract(days, 'days');
     ms = then.diff(now, 'milliseconds', true);
-    var hours = Math.floor(moment.duration(ms).asHours());
+    hours = Math.floor(moment.duration(ms).asHours());
 
     // minutes
     then = then.subtract(hours, 'hours');
     ms = then.diff(now, 'milliseconds', true);
-    var minutes = Math.floor(moment.duration(ms).asMinutes());
+    minutes = Math.floor(moment.duration(ms).asMinutes());
 
-    if (startDateObj > endDateObj) {
+    if (isNegative) {
       this.setState({totalDuration: "Error: Start Date is greater then the End Date!"});
     } else {
       this.setState({
@@ -86,12 +92,11 @@ class App extends React.Component {
     return (
       <div className="App">
           <NavBar/>
-          <h1 className="h1 p-4">ClockDuration</h1>
 
+          <h1 className="h1 p-4">ClockDuration</h1>
           <div className="container">
             <div className="row">
               <div className="col-md-6 offset-md-3">
-                <hr/>
 
                 {/* start date and time */}
                 <div className="col-md-7">
