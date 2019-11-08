@@ -39,28 +39,26 @@ class Time extends React.Component {
 
     render() {
         return (
-            <div className="container">
-                <div className="row p-2">
+            <div>
+                <div className="row">
                     <label htmlFor={this.props.inputName} className="label label-default float-left">Time: </label>
-                    <div className="col-md-3">
-                        <input type="text" id={this.props.inputName} className="form-control" defaultValue={moment(this.props.defaultValue).format('h')} onChange={this.hourChange.bind(this)} required/>
+                </div>
+                <div className="row">
+                    <div className="col-md-2 offset-md-2 col">
+                        <input type="tel" id={this.props.inputName} className="form-control" defaultValue={moment(this.props.defaultValue).format('h')} onChange={this.hourChange.bind(this)} required/>
                     </div>
                     :
-                    <div className="col-md-3">
-                        <input type="text" id={this.props.inputName} className="form-control" defaultValue={moment(this.props.defaultValue).format('mm')} onChange={this.minuteChange.bind(this)} required/>
+                    <div className="col-md-2 col">
+                        <input type="tel" id={this.props.inputName} className="form-control" defaultValue={moment(this.props.defaultValue).format('mm')} onChange={this.minuteChange.bind(this)} required/>
                     </div>
-                    <div className="col-md-4">
+                    <div className="col-md-3 col-5">
                         <select className="form-control" id={this.props.inputName} defaultValue={moment(this.props.defaultValue).format('A')} onChange={this.ampmChange.bind(this)} required>
                             <option value="AM">AM</option>
                             <option value="PM">PM</option>
                         </select>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-md">
-                        {this.state.isValid ? '' : <ValidationMessage boldMessage="ERROR:" message="Time Format Is h:mm AM/PM"/>}
-                    </div>
-                </div>
+                {this.state.isValid ? '' : <ValidationMessage boldMessage="ERROR:" message="Time Format Is h:mm AM/PM"/>}
             </div>
         );
     }

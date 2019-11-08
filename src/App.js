@@ -1,7 +1,5 @@
 import React from 'react';
-import './style.css';
 import NavBar from './NavBar';
-import Footer from './Footer';
 import Time from './Time';
 import Date from './Date';
 import moment from 'moment';
@@ -21,6 +19,14 @@ class App extends React.Component {
 
   getFullDate() {
     return moment(this.state.startDate + " " + this.state.startTime, this.dateFormat + this.timeFormat);
+  }
+
+  getFullStartDateTime() {
+    return moment(moment(this.state.startDate + " " + this.state.startTime, this.dateFormat + this.timeFormat)).format('dddd D MMMM YYYY LT');
+  }
+
+  getFullEndDateTime() {
+    return moment(moment(this.state.endDate + " " + this.state.endTime, this.dateFormat + this.timeFormat)).format('dddd D MMMM YYYY LT');
   }
 
   startDateChange = (event) => {
@@ -104,14 +110,13 @@ class App extends React.Component {
           <h1 className="h1 p-4 text-center">ClockDuration</h1>
           <div className="container">
             <div className="row">
-              <div className="col-md-6 offset-md-3">
-
+              <div className="col-md-7 offset-md-3">
                 {/* start date and time */}
-                <div className="col-md">
+                <div className="row p-1">
                   <h2 className="h2 float-left">Start</h2>
                 </div>
-                <div className="form-group row">
-                  <div className="col-md-10 p-4">
+                <div className="form-group row p-2">
+                  <div className="col-md-10 offset-md-1">
                     <Date
                       inputName="startDate"
                       defaultValue={this.getFullDate()}  
@@ -125,7 +130,7 @@ class App extends React.Component {
                     />
                   </div>
 
-                  <div className="col-md-10">
+                  <div className="col-md-10 offset-md-1">
                     <Time
                       inputName="startTime"
                       defaultValue={this.getFullDate()}    
@@ -139,15 +144,20 @@ class App extends React.Component {
                     />
                   </div>
                 </div>
+                <div className="row">
+                  <div className="col-md-10 offset-md-1">
+                    <small>From: <strong>{this.getFullStartDateTime()}</strong> </small>
+                  </div>
+                </div>
 
                 <hr/>
 
                 {/* end date and time */}
-                <div className="col-md">
+                <div className="row p-1">
                   <h2 className="h2 float-left">End</h2>
                 </div>
-                <div className="form-group row">
-                    <div className="col-md-10 p-4">
+                <div className="form-group row p-2">
+                    <div className="col-md-10 offset-md-1">
                       <Date
                         inputName="endDate"
                         defaultValue={this.getFullDate()} 
@@ -161,7 +171,7 @@ class App extends React.Component {
                       />                     
                     </div>
 
-                    <div className="col-md-10">
+                    <div className="col-md-10 offset-md-1">
                       <Time
                         inputName="endTime"
                         defaultValue={this.getFullDate()}   
@@ -175,9 +185,14 @@ class App extends React.Component {
                       />                                        
                     </div>
                 </div>
+                <div className="row">
+                  <div className="col-md-10 offset-md-1">
+                    <small>To: <strong>{this.getFullEndDateTime()}</strong> </small>
+                  </div>
+                </div>
 
                 {/* calculate button */}
-                <div className="form-group row">
+                <div className="form-group row p-2">
                   <div className="col-md-6 offset-md-3">
                     <button type="button" className="btn btn-dark btn-lg btn-block" onClick={this.calculateTotalDuration.bind(this)} disabled={!this.state.validInputs}>Calculate</button>
                   </div>
@@ -196,8 +211,6 @@ class App extends React.Component {
               </div>
             </div>
           </div>
-
-          <Footer/>
       </div>
     );
   }
