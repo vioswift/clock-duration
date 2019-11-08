@@ -92,7 +92,7 @@ class Date extends React.Component {
                         />
                     </div>
                     /
-                    <div className="col-md-3 col-5">
+                    <div className="col-md-4 col-5">
                         <div className="input-group mb-3">
                             <input type="tel" 
                                 id={this.props.inputName} 
