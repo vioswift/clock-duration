@@ -107,7 +107,7 @@ class App extends React.Component {
       <div>
           <NavBar/>
 
-          <h1 className="h1 p-4 text-center">ClockDuration</h1>
+          <h1 className="h1 p-3 text-center">ClockDuration</h1>
           <div className="container">
             <div className="row">
               <div className="col-md-7 offset-md-3">
