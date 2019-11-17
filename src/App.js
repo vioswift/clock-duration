@@ -45,6 +45,10 @@ class App extends React.Component {
     this.setState({endTime: event.target.value});
   }
 
+  showCalculation(value, text) {
+    return value !== 0 ? value + text : '';
+  }
+
   calculateTotalDuration()  {
     var startDate = moment(this.state.startDate + " " + this.state.startTime, this.dateFormat + this.timeFormat);
     var endDate = moment(this.state.endDate + " " + this.state.endTime, this.dateFormat + this.timeFormat);
@@ -58,6 +62,7 @@ class App extends React.Component {
     var then = endDate;
     var ms = then.diff(now, 'milliseconds', true); // time now
     var isNegative = now.isAfter(then); // is the start date, start before the end date
+    var durationText = '';
 
     if (!isNegative) {
       // years
@@ -88,14 +93,18 @@ class App extends React.Component {
       ms = then.diff(now, 'milliseconds', true);
       minutes = Math.floor(moment.duration(ms).asMinutes());
 
+      durationText = 
+        this.showCalculation(years, " Years, ") + 
+        this.showCalculation(months, " Months, ") + 
+        this.showCalculation(weeks, " Weeks, ") +
+        this.showCalculation(days, " Days, ") + 
+        this.showCalculation(hours, " Hours, ") + 
+        this.showCalculation(minutes, " Minutes  ");
+        
+      durationText = durationText.substr(durationText.length - 2) !== ',' ? durationText.substring(0, durationText.length - 2) : durationText;
+
       this.setState({
-        totalDuration: 
-        years + " Years, " + 
-        months + " Months, " + 
-        weeks + " Weeks, " +
-        days + " Days, " + 
-        hours + " Hours, " + 
-        minutes + " Minutes"
+        totalDuration: durationText
       });
     } else {
       this.setState({totalDuration: "Error: Start Date is greater then the End Date!"});
@@ -106,9 +115,7 @@ class App extends React.Component {
     return (
       <div>
           <NavBar/>
-
-          <h1 className="h1 p-3 text-center">ClockDuration</h1>
-          <div className="container">
+          <div className="container p-3">
             <div className="row">
               <div className="col-md-7 offset-md-3">
                 {/* start date and time */}
@@ -122,7 +129,9 @@ class App extends React.Component {
                       defaultValue={this.getFullDate()}  
                       format={this.dateFormat}                
                       date={date => {
-                        this.setState({ startDate: date });
+                        this.setState({ startDate: date }, function () {
+                            this.calculateTotalDuration();
+                        });
                       }}
                       validInput={validInput => {
                         this.setState({ validInputs: validInput });
@@ -136,7 +145,9 @@ class App extends React.Component {
                       defaultValue={this.getFullDate()}    
                       format={this.timeFormat}                 
                       time={time => {
-                        this.setState({ startTime: time });
+                        this.setState({ startTime: time }, function () {
+                            this.calculateTotalDuration();
+                        });
                       }}
                       validInput={validInput => {
                         this.setState({ validInputs: validInput });
@@ -163,7 +174,9 @@ class App extends React.Component {
                         defaultValue={this.getFullDate()} 
                         format={this.dateFormat}                    
                         date={date => {
-                          this.setState({ endDate: date });
+                          this.setState({ endDate: date }, function () {
+                              this.calculateTotalDuration();
+                          });
                         }}
                         validInput={validInput => {
                           this.setState({ validInputs: validInput });
@@ -177,7 +190,9 @@ class App extends React.Component {
                         defaultValue={this.getFullDate()}   
                         format={this.timeFormat}
                         time={time => {
-                          this.setState({ endTime: time });
+                          this.setState({ endTime: time }, function () {
+                            this.calculateTotalDuration();
+                          });
                         }}
                         validInput={validInput => {
                           this.setState({ validInputs: validInput });
@@ -190,15 +205,8 @@ class App extends React.Component {
                     <small>To: <strong>{this.getFullEndDateTime()}</strong> </small>
                   </div>
                 </div>
-
-                {/* calculate button */}
-                <div className="form-group row p-2">
-                  <div className="col-md-6 offset-md-3">
-                    <button type="button" className="btn btn-dark btn-lg btn-block" onClick={this.calculateTotalDuration.bind(this)} disabled={!this.state.validInputs}>Calculate</button>
-                  </div>
-                </div>
-
-                <small><strong>*</strong>Includes <strong>start</strong> and <strong>end</strong> date</small>
+                <div className="p-2"></div>
+                <small className="p-3"><strong>*</strong>Includes <strong>start</strong> and <strong>end</strong> date</small>
 
                 {/* total duration */}
                 <div className="form-group row">
