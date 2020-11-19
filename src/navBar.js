@@ -13,7 +13,7 @@ render() {
                 <div className="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul className="navbar-nav">
                         <li className="nav-item">
-                            <a className="nav-link" target="_blank" rel="noopener noreferrer" href="http://vioswift.com/">Vioswift</a>
+                            
                         </li>
                     </ul>
                 </div>
